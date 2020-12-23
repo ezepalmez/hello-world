@@ -3,7 +3,7 @@ FROM openjdk:8-jre-alpine as builder
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} helloworld.jar
-RUN java -Djarmode=layertools -jar application.jar extract
+RUN java -Djarmode=layertools -jar helloworld.jar extract
 
 FROM openjdk:11-jre-slim
 WORKDIR application
