@@ -1,17 +1,8 @@
-FROM openjdk:8-jre-alpine as builder
+FROM openjdk:8-jre-alpine
 
-WORKDIR application
+WORKDIR /usr/app
 ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} helloworld.jar
-RUN java -Djarmode=layertools -jar helloworld.jar extract
+COPY ${JAR_FILE} /usr/app/
 
-FROM openjdk:11-jre-slim
-WORKDIR application
-COPY --from=builder application/dependencies/ ./
-COPY --from=builder application/spring-boot-loader/ ./
-COPY --from=builder application/snapshot-dependencies/ ./
-COPY --from=builder application/application/ ./
-
-EXPOSE 8081
-
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+# Run the jar file 
+ENTRYPOINT ["java","-Dserver.port=8081","-Djava.security.egd=file:/dev/./urandom","-jar", ${JAR_FILE}]
