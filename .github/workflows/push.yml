@@ -1,14 +1,17 @@
-on: [push]
-
+on: push
+name: deploying
 jobs:
-  test:
+  deploy:
+    name: deploying to cluster
     runs-on: ubuntu-latest
-    name: Testing
     steps:
-      - name: Test our action
-        uses: andrioid/gh-action-k8s-set-image
-        with:
-          namespace: "default"
-          images: |
-            deployment.example.backend=gcr.io/example/backend:latest
-            deployment.example.frontend=gcr.io/example/frontend:latest
+    - uses: actions/checkout@master
+    - name: build and push to docker
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: ${{ github.repository }}
+        tag_with_ref: true
+        tag_with_sha: true
+        tags: ${{ github.sha }}
