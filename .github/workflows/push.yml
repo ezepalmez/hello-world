@@ -20,6 +20,7 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
+        args: kubectl create deployment my-app-helloworld --image=ezepalmez/hello-world:tagnamey
         args: set image --record deployment/my-app-helloworld prueba-gha=${{ github.repository }}:${{ github.sha }}
     - name: verify deployment
       uses: steebchen/kubectl@master
