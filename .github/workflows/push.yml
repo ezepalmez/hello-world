@@ -16,10 +16,10 @@ jobs:
         tag_with_sha: true
         tags: ${{ github.sha }}
     - name: Test our action
-        uses: andrioid/gh-action-k8s-set-image
-        with:
-          namespace: "default"
-          images: deployment.my-app-helloworld.prueba-gha=ezepalmez/hello-world:lastname
+      uses: andrioid/gh-action-k8s-set-image
+      with:
+        namespace: "default"
+        images: deployment.my-app-helloworld.prueba-gha=ezepalmez/hello-world:lastname
     - name: deploy to cluster
       uses: steebchen/kubectl@master
       env:
