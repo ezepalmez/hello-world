@@ -1,17 +1,12 @@
-FROM openjdk:8-jre-alpine as builder
-
+FROM maven:3.6.3-jdk-11-slim@sha256:68ce1cd457891f48d1e137c7d6a4493f60843e84c9e2634e3df1d3d5b381d36c AS build
+RUN mkdir /project
+COPY . /project
+WORKDIR /project
+RUN mvn clean package -DskipTests
+ 
+FROM adoptopenjdk/openjdk11:jre-11.0.9.1_1-alpine@sha256:b6ab039066382d39cfc843914ef1fc624aa60e2a16ede433509ccadd6d995b1f
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} helloworld.jar
-RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM openjdk:8-jre-alpine
-WORKDIR application
-COPY --from=builder application/dependencies/ ./
-COPY --from=builder application/spring-boot-loader/ ./
-COPY --from=builder application/snapshot-dependencies/ ./
-COPY --from=builder application/application/ ./
-
-EXPOSE 8081
-
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","helloworld.jar"]
