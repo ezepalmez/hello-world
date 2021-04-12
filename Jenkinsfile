@@ -1,14 +1,13 @@
 pipeline {
   agent any
-
-	parameters {
+  parameters {
         string(name: 'name_container', defaultValue: 'container-hello-world', description: 'nombre del docker')
         string(name: 'name_imagen', defaultValue: 'image-hello-world', description: 'nombre de la imagen')
         string(name: 'tag_imagen', defaultValue: 'latest', description: 'etiqueta de la imagen')
         string(name: 'puerto_imagen', defaultValue: '81', description: 'puerto a publicar')
     }
     environment {
-        name_final = "${name_container}${tag_imagen}${puerto_imagen}"        
+        name_final = "${name_container}:${tag_imagen}$:{puerto_imagen}"        
     }
     stages {
           stage('stop/rm') {
@@ -31,7 +30,7 @@ pipeline {
             steps {
                 script{
                     sh ''' 
-                    docker build -t ${name_imagen}:${tag_imagen} .
+                    docker build . -t ${name_imagen}:${tag_imagen}
                     '''
                 }
                     
