@@ -1,12 +1,11 @@
-FROM maven:3.6.3-jdk-11-slim@sha256:68ce1cd457891f48d1e137c7d6a4493f60843e84c9e2634e3df1d3d5b381d36c AS build
-RUN mkdir /project
-COPY . /project
-WORKDIR /project
-RUN mvn clean package -DskipTests
- 
-FROM adoptopenjdk/openjdk11:jre-11.0.9.1_1-alpine@sha256:b6ab039066382d39cfc843914ef1fc624aa60e2a16ede433509ccadd6d995b1f
-WORKDIR application
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} helloworld.jar
+FROM maven:3.6.0-jdk-11-slim AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","helloworld.jar"]
+## Package stage
+
+FROM openjdk:11-jre-slim
+COPY --from=build /home/app/target/helloworld-1.0.0.jar /usr/local/lib/helloworld.jar
+##EXPOSE 8081
+ENTRYPOINT ["java","-jar","/usr/local/lib/helloworld.jar"]
