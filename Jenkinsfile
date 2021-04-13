@@ -5,9 +5,10 @@ pipeline {
         string(name: 'name_imagen', defaultValue: 'image-hello-world', description: 'nombre de la imagen')
         string(name: 'tag_imagen', defaultValue: 'latest', description: 'etiqueta de la imagen')
         string(name: 'puerto_imagen', defaultValue: '8081', description: 'puerto a publicar')
+	string(name: 'caracter', defaultValue: ':', description: 'caracter dos puntos')
     }
     environment {
-        name_final = "${name_container}${5}${tag_imagen}${5}${puerto_imagen}"        
+        name_final = "${name_container}${caracter}${tag_imagen}${caracter}${puerto_imagen}"
     }
     stages {
           stage('stop/rm') {
