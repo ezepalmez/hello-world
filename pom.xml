@@ -77,6 +77,16 @@
     </dependencies>
   
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>{$jib-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -88,7 +98,6 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>{$jib-maven-plugin.version}</version>
                 <configuration>
                     <from>
                         <image>{$docker.distroless.images}</image>
@@ -104,6 +113,6 @@
                     </container>
                 </configuration>    
             </plugin>
-        </plugins>
+        </plugins>       
     </build>
 </project>
