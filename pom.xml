@@ -21,7 +21,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
+        <jib-maven-plugin.version>2.6.0</jib-maven-plugin.version>
+        <docker.distroless.images> grc.io/distrolles.image/java:11</docker.distroless.images>
+        <docker.repo.url>registry.hub.docker.com/ezepalmez</docker.repo.url>
+        <docker.repo.project>helloworld</docker.repo.project>
+        <docker.image.name>{$docker.repo.url}/{$docker.repo.project}</docker.image.name>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -68,6 +75,7 @@
             <version>2.1.6</version>
         </dependency>
     </dependencies>
+  
     <build>
         <plugins>
             <plugin>
@@ -76,6 +84,25 @@
                 <configuration>
                     <executable>true</executable>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>{$jib-maven-plugin.version}</version>
+                <configuration>
+                    <from>
+                        <image>{$docker.distroless.images}</image>
+                        <tags>
+                            <tag>{$project.version}</tag>
+                        </tags>
+                    </from>
+                    <to>
+                        <image>{$docker.image.name}</image>
+                    </to>
+                    <container>
+                        <mainClass>pe.gob.migraciones.mcm.configuracion</mainClass>
+                    </container>
+                </configuration>    
             </plugin>
         </plugins>
     </build>
